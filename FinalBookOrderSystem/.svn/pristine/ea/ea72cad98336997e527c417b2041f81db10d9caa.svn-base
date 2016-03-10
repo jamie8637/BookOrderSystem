@@ -1,0 +1,107 @@
+package businessLayer;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class Book extends DatabaseBridge {
+
+	/*
+	 * Will be called from the GUI. Consist of String to be used as sql stmt.
+	 * Call dataLayer method and send string. Return ResultSet it receives.
+	 */
+	public ResultSet getList() {
+		rs = dbc.query("SELECT isbn FROM bookstore_book");
+		return rs;
+	}
+
+	/*
+	 * Will be called from the GUI. Consist of String to be used as sql stmt.
+	 * Call dataLayer method and send string. Return ResultSet it receives.
+	 */
+	public ResultSet getDbData(String isbn) {
+		rs = dbc.query("SELECT * FROM bookstore_book WHERE isbn = '" + isbn
+				+ "'");
+		return rs;
+
+	}
+
+	/*
+	 * Will be called from the GUI. Consist of code to validate entered data.
+	 * Return String with specific validation error, okay to add (okay), or
+	 * already exists (exists).
+	 */
+	public String validateData(String isbn, String title, int edition,
+			String authorFName, String authorLName, String publisher,
+			String copyright, double cost) {
+		String resultTitle = null;
+		int resultEdition = 0;
+		String resultAuthorFName = null;
+		String resultAuthorLName = null;
+		String resultPublisher = null;
+		String resultCopyright = null;
+		double resultCost = 0;
+		
+		
+
+		rs = dbc.query("SELECT * FROM bookstore_book WHERE isbn = '" + isbn
+				+ "'");
+		try {
+			if (!rs.isBeforeFirst())
+				return "new"; // if the isbn doesn't exist, returns "new"
+			while (rs.next()) {
+				resultTitle = (rs.getString(2));
+				resultEdition = (rs.getInt(3));
+				resultAuthorFName = (rs.getString(4));
+				resultAuthorLName = (rs.getString(5));
+				resultPublisher = (rs.getString(6));
+				resultCopyright = (rs.getDate(7).toString());
+				resultCost = (rs.getDouble(8));
+			}
+		} catch (SQLException e) {
+			LOGGER.warning("course validate failure");
+		}
+		if ((title.equals(resultTitle)) && (edition == resultEdition)
+				&& (authorFName.equals(resultAuthorFName))
+				&& (authorLName.equals(resultAuthorLName))
+				&& (publisher.equals(resultPublisher))
+				&& (copyright.equals(resultCopyright))
+				&& (cost == resultCost))
+			return "nochange"; // if all data is the same, returns "nochange"
+		else
+			return "update"; // if some data is different and needs update,
+								// returns "update"
+	}
+
+	/*
+	 * Will be called from the GUI. Consist of String to be used to commit an
+	 * sql stmt. Call dataLayer method and send string. Return boolean result of
+	 * success or failure.
+	 */
+	public boolean newRow(String isbn, String title, int edition,
+			String authorFName, String authorLName, String publisher,
+			String copyright, double cost) {
+		updateCount = dbc.update("INSERT INTO bookstore_book VALUES ('" + isbn
+				+ "', '" + title + "', '" + edition + "', '" + authorFName
+				+ "', '" + authorLName + "', '" + publisher + "', to_date('"
+				+ copyright + "', 'MM-DD-YYYY'), '" + cost + "')");
+		if (updateCount == 1)
+			return true;
+		else
+			return false;
+	}
+	
+	public boolean updateRow(String isbn, String title, int edition,
+			String authorFName, String authorLName, String publisher,
+			String copyright, double cost) {
+		updateCount = dbc.update("UPDATE bookstore_book SET title = '" + title
+				+ "', edition = '" + edition + "', author_f_name = '"
+				+ authorFName + "', author_l_name = '" + authorLName
+				+ "', publisher = '" + publisher
+				+ "', publish_date = to_date('" + copyright
+				+ "', 'MM-DD-YYYY'), cost = '" + cost + "' WHERE isbn = '" + isbn + "'");
+		if (updateCount == 1)
+			return true;
+		else
+			return false;
+	}
+}

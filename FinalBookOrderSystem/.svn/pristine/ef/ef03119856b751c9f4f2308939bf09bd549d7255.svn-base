@@ -1,0 +1,816 @@
+package frontEndLayer;
+
+import java.awt.EventQueue;
+import javax.swing.JFrame;
+import javax.swing.JMenuBar;
+import javax.swing.JTabbedPane;
+import javax.swing.JPanel;
+import javax.swing.border.TitledBorder;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JTextArea;
+import javax.swing.JScrollPane;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.logging.Logger;
+
+import businessLayer.Book;
+import businessLayer.Course;
+import businessLayer.Professor;
+import businessLayer.Section;
+import businessLayer.SectionBook;
+
+
+
+public class NewBookDialogGUI {
+	private final static Logger LOGGER = Logger.getLogger(NewBookDialogGUI.class.getName());
+
+	Book currentBook = new Book();
+	Course currentCourse = new Course();
+	Professor currentProfessor = new Professor();
+	Section currentSection = new Section();
+	SectionBook currentSectionBook = new SectionBook();
+	JComboBox<String> courseIdCb;
+	JComboBox<String> sectionCb;
+	JComboBox<String> isbnCb;
+	JComboBox<String> profIdCb;
+	private boolean isInitializingCb = false;
+	private JFrame frmBookRequisitionApplication;
+	private JTextField requistionTF;
+	private JTextField courseNameTF;
+	private JTextField startDateTF;
+	private JTextField profFirstTF;
+	private JTextField editionTF;
+	private JTextField authorFirstTF;
+	private JTextField copyrightTF;
+	private JTextField titleTF;
+	private JTextField publisherTF;
+	private JTextField authorLastTF;
+	private JTextField costTF;
+	private JTextField programChairTF;
+	private JTextField profLastTF;
+	private JTextField endDateTF;
+	private JTextField profEmailTF;
+	private JTextField campusTF;
+	private JTextField timeTF;
+	private JTextField termTF;
+	private JTextField reqCourseIDTF;
+	private JTextField reqSectionTF;
+	private JTextField reqStartTF;
+	private JTextField textField_25;
+	private JTextField reqIsbnTF;
+	private JTextField reqAuthorFNameTF;
+	private JTextField reqEditionTF;
+	private JTextField reqPublisherTF;
+	private JTextField reqQuantityTF;
+	private JTextField reqProfIDTF;
+	private JTextField reqCoureNameTF;
+	private JTextField reqTimeTF;
+	private JTextField reqEndTF;
+	private JTextField reqTitleTF;
+	private JTextField reqStatusTF;
+	private JTextField reqCopyrightTF;
+	private JTextField reqCostTF;
+	private JTextField reqAuthorLNameTF;
+	private JTextField reqCampusTF;
+	private JTextField reqProfLastNameTF;	
+	private JTextField quantityTF;
+	private JTextField reqProfFirstNameTF;
+	private JTextField reqProgramChairTF;
+	private JTextField reqEmailTF;
+	
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					NewBookDialogGUI window = new NewBookDialogGUI();
+					window.frmBookRequisitionApplication.setVisible(true);
+					
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the application.
+	 */
+	public NewBookDialogGUI() {
+		initialize();
+	}
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+		frmBookRequisitionApplication = new JFrame();
+		frmBookRequisitionApplication.setTitle("Book Requisition Application");
+		frmBookRequisitionApplication.setBounds(100, 100, 733, 712);
+		frmBookRequisitionApplication.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		JMenuBar menuBar = new JMenuBar();
+		frmBookRequisitionApplication.setJMenuBar(menuBar);
+		
+		JMenu mnNewMenu = new JMenu("File");
+		menuBar.add(mnNewMenu);
+		
+		JMenuItem mntmNewMenuItem = new JMenuItem("New menu item");
+		mnNewMenu.add(mntmNewMenuItem);
+		
+		JMenu mnNewMenu_1 = new JMenu("About");
+		menuBar.add(mnNewMenu_1);
+		
+		JMenuItem mntmNewMenuItem_1 = new JMenuItem("New menu item");
+		mnNewMenu_1.add(mntmNewMenuItem_1);
+		
+		JMenu mnNewMenu_2 = new JMenu("Help");
+		menuBar.add(mnNewMenu_2);
+		
+		JMenuItem mntmNewMenuItem_2 = new JMenuItem("New menu item");
+		mnNewMenu_2.add(mntmNewMenuItem_2);
+		frmBookRequisitionApplication.getContentPane().setLayout(null);
+		
+		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane.setBounds(10, 11, 695, 631);
+		frmBookRequisitionApplication.getContentPane().add(tabbedPane);
+		
+		JPanel addFormPanel = new JPanel();
+		tabbedPane.addTab("Add", null, addFormPanel, null);
+		addFormPanel.setLayout(null);
+		
+		JPanel coursePanel = new JPanel();
+		coursePanel.setBorder(new TitledBorder(null, "Course", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		coursePanel.setBounds(6, 11, 672, 169);
+		addFormPanel.add(coursePanel);
+		coursePanel.setLayout(null);
+		
+		JPanel panel_3 = new JPanel();
+		panel_3.setBounds(10, 16, 650, 140);
+		coursePanel.add(panel_3);
+		panel_3.setLayout(null);
+		
+		JLabel requisitionLabel = new JLabel("Requisition ID:");
+		requisitionLabel.setBounds(10, 16, 111, 14);
+		panel_3.add(requisitionLabel);
+		
+		JLabel courseNameLabel = new JLabel("Course Name:");
+		courseNameLabel.setBounds(10, 46, 111, 14);
+		panel_3.add(courseNameLabel);
+		
+		JLabel startDateLabel = new JLabel("Start Date:");
+		startDateLabel.setBounds(10, 76, 111, 14);
+		panel_3.add(startDateLabel);
+		
+		requistionTF = new JTextField();
+		requistionTF.setBounds(123, 12, 169, 20);
+		panel_3.add(requistionTF);
+		requistionTF.setColumns(10);
+		
+		courseNameTF = new JTextField();
+		courseNameTF.setBounds(123, 44, 169, 20);
+		panel_3.add(courseNameTF);
+		courseNameTF.setColumns(10);
+		
+		startDateTF = new JTextField();
+		startDateTF.setBounds(123, 76, 169, 20);
+		panel_3.add(startDateTF);
+		startDateTF.setColumns(10);
+		
+		JLabel courseIDLabel = new JLabel("Course ID:");
+		courseIDLabel.setBounds(321, 16, 110, 14);
+		panel_3.add(courseIDLabel);
+		
+		JLabel sectionLabel = new JLabel("Section ID:");
+		sectionLabel.setBounds(321, 46, 110, 14);
+		panel_3.add(sectionLabel);
+		
+		JLabel endDateLabel = new JLabel("End Date:");
+		endDateLabel.setBounds(321, 76, 110, 16);
+		panel_3.add(endDateLabel);
+		
+		endDateTF = new JTextField();
+		endDateTF.setBounds(427, 76, 211, 20);
+		panel_3.add(endDateTF);
+		endDateTF.setColumns(10);
+		
+		JLabel timeLabel = new JLabel("Time: ");
+		timeLabel.setBounds(10, 106, 111, 14);
+		panel_3.add(timeLabel);
+		
+		timeTF = new JTextField();
+		timeTF.setColumns(10);
+		timeTF.setBounds(123, 108, 169, 20);
+		panel_3.add(timeTF);
+		
+		JLabel termLabel = new JLabel("Term:");
+		termLabel.setBounds(321, 108, 110, 16);
+		panel_3.add(termLabel);
+		
+		termTF = new JTextField();
+		termTF.setColumns(10);
+		termTF.setBounds(427, 108, 211, 20);
+		panel_3.add(termTF);
+		
+		courseIdCb = new JComboBox<String>();
+		courseIdCb.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (isInitializingCb) return;
+				populateTf("course", currentCourse.getDbData((String) courseIdCb.getSelectedItem()));
+			}
+		});
+		courseIdCb.setEditable(true);
+		courseIdCb.setBounds(427, 12, 211, 20);
+		panel_3.add(courseIdCb);
+		
+		sectionCb = new JComboBox<String>();
+		sectionCb.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (isInitializingCb) return;
+				populateTf("section", currentSection.getDbData((String) sectionCb.getSelectedItem()));
+			}
+		});
+		sectionCb.setEditable(true);
+		sectionCb.setBounds(427, 44, 211, 20);
+		panel_3.add(sectionCb);
+		
+		JPanel texbookPanel = new JPanel();
+		texbookPanel.setLayout(null);
+		texbookPanel.setBorder(new TitledBorder(null, "Textbook", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		texbookPanel.setBounds(6, 191, 672, 220);
+		addFormPanel.add(texbookPanel);
+		
+		JPanel panel_6 = new JPanel();
+		panel_6.setBounds(10, 16, 650, 193);
+		texbookPanel.add(panel_6);
+		panel_6.setLayout(null);
+		
+		JLabel isbnLabel = new JLabel("ISBN:");
+		isbnLabel.setBounds(10, 18, 111, 14);
+		panel_6.add(isbnLabel);
+		
+		JLabel editionLabel = new JLabel("Edition:");
+		editionLabel.setBounds(10, 50, 111, 14);
+		panel_6.add(editionLabel);
+		
+		JLabel authorFNameLabel = new JLabel("Author First Name:");
+		authorFNameLabel.setBounds(10, 82, 111, 14);
+		panel_6.add(authorFNameLabel);
+		
+		JLabel copyrightLabel = new JLabel("Copyright:");
+		copyrightLabel.setBounds(10, 114, 111, 14);
+		panel_6.add(copyrightLabel);
+		
+		editionTF = new JTextField();
+		editionTF.setBounds(125, 48, 167, 20);
+		panel_6.add(editionTF);
+		editionTF.setColumns(10);
+		
+		authorFirstTF = new JTextField();
+		authorFirstTF.setBounds(125, 82, 167, 20);
+		panel_6.add(authorFirstTF);
+		authorFirstTF.setColumns(10);
+		
+		copyrightTF = new JTextField();
+		copyrightTF.setBounds(125, 116, 167, 20);
+		panel_6.add(copyrightTF);
+		copyrightTF.setColumns(10);
+		
+		JLabel titleLabel = new JLabel("Title:");
+		titleLabel.setBounds(321, 18, 110, 14);
+		panel_6.add(titleLabel);
+		
+		JLabel publisherLabel = new JLabel("Publisher:");
+		publisherLabel.setBounds(321, 50, 110, 14);
+		panel_6.add(publisherLabel);
+		
+		JLabel authorLNameLabel = new JLabel("Author Last Name:");
+		authorLNameLabel.setBounds(321, 82, 110, 14);
+		panel_6.add(authorLNameLabel);
+		
+		JLabel costLabel = new JLabel("Cost:");
+		costLabel.setBounds(321, 114, 110, 14);
+		panel_6.add(costLabel);
+		
+		titleTF = new JTextField();
+		titleTF.setBounds(435, 14, 203, 20);
+		panel_6.add(titleTF);
+		titleTF.setColumns(10);
+		
+		publisherTF = new JTextField();
+		publisherTF.setBounds(435, 48, 203, 20);
+		panel_6.add(publisherTF);
+		publisherTF.setColumns(10);
+		
+		authorLastTF = new JTextField();
+		authorLastTF.setBounds(435, 82, 203, 20);
+		panel_6.add(authorLastTF);
+		authorLastTF.setColumns(10);
+		
+		costTF = new JTextField();
+		costTF.setBounds(435, 116, 203, 20);
+		panel_6.add(costTF);
+		costTF.setColumns(10);
+		
+		JLabel quantityLabel = new JLabel("Quantity:");
+		quantityLabel.setBounds(12, 153, 55, 16);
+		panel_6.add(quantityLabel);
+		
+		quantityTF = new JTextField();
+		quantityTF.setBounds(125, 151, 167, 20);
+		panel_6.add(quantityTF);
+		quantityTF.setColumns(10);
+		
+		JLabel statusLabel = new JLabel("Status:");
+		statusLabel.setBounds(321, 153, 110, 16);
+		panel_6.add(statusLabel);
+		
+		JComboBox<String> statusCB = new JComboBox<String>();
+		statusCB.addItem("Required");
+		statusCB.addItem("Optional");
+		statusCB.addItem("Recommended");
+		statusCB.setBounds(435, 149, 203, 20);
+		panel_6.add(statusCB);
+		
+		isbnCb = new JComboBox<String>();
+		isbnCb.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (isInitializingCb) return;
+				populateTf("book", currentBook.getDbData((String) isbnCb.getSelectedItem()));
+			}
+		});
+		isbnCb.setEditable(true);
+		isbnCb.setBounds(125, 14, 167, 20);
+		panel_6.add(isbnCb);
+		
+		JPanel professorPanel = new JPanel();
+		professorPanel.setLayout(null);
+		professorPanel.setBorder(new TitledBorder(null, "Professor", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		professorPanel.setBounds(6, 422, 672, 138);
+		addFormPanel.add(professorPanel);
+		
+		JPanel panel_8 = new JPanel();
+		panel_8.setBounds(10, 16, 650, 111);
+		professorPanel.add(panel_8);
+		panel_8.setLayout(null);
+		
+		JLabel profIDLabel = new JLabel("Professor ID:");
+		profIDLabel.setBounds(10, 11, 111, 14);
+		panel_8.add(profIDLabel);
+		
+		JLabel profFNameLabel = new JLabel("First Name:");
+		profFNameLabel.setBounds(10, 43, 111, 14);
+		panel_8.add(profFNameLabel);
+		
+		JLabel programChairLabel = new JLabel("Program Chair:");
+		programChairLabel.setBounds(321, 11, 110, 14);
+		panel_8.add(programChairLabel);
+		
+		JLabel profLNameLabel = new JLabel("Last Name:");
+		profLNameLabel.setBounds(321, 43, 110, 14);
+		panel_8.add(profLNameLabel);
+		
+		profFirstTF = new JTextField();
+		profFirstTF.setBounds(121, 40, 171, 20);
+		panel_8.add(profFirstTF);
+		profFirstTF.setColumns(10);
+		
+		programChairTF = new JTextField();
+		programChairTF.setBounds(435, 8, 203, 20);
+		panel_8.add(programChairTF);
+		programChairTF.setColumns(10);
+		
+		profLastTF = new JTextField();
+		profLastTF.setBounds(435, 40, 203, 20);
+		panel_8.add(profLastTF);
+		profLastTF.setColumns(10);
+		
+		JLabel profEmailLabel = new JLabel("Email:");
+		profEmailLabel.setBounds(10, 82, 111, 14);
+		panel_8.add(profEmailLabel);
+		
+		profEmailTF = new JTextField();
+		profEmailTF.setColumns(10);
+		profEmailTF.setBounds(121, 79, 171, 20);
+		panel_8.add(profEmailTF);
+		
+		JLabel campusLabel = new JLabel("Campus:");
+		campusLabel.setBounds(321, 82, 110, 14);
+		panel_8.add(campusLabel);
+		
+		campusTF = new JTextField();
+		campusTF.setColumns(10);
+		campusTF.setBounds(435, 79, 203, 20);
+		panel_8.add(campusTF);
+		
+		profIdCb = new JComboBox<String>();
+		profIdCb.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (isInitializingCb) return;
+				populateTf("professor", currentProfessor.getDbData((String) profIdCb.getSelectedItem()));
+			}
+		});
+		profIdCb.setEditable(true);
+		profIdCb.setBounds(121, 8, 171, 20);
+		panel_8.add(profIdCb);
+		
+		JButton clearButton = new JButton("Clear");
+		clearButton.setBounds(490, 571, 89, 23);
+		addFormPanel.add(clearButton);
+		
+		JButton submitButton = new JButton("Submit");
+		submitButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+																	// validateData then skip, newRow, or updateRow
+				String status = null;
+				String courseId = courseIdCb.getSelectedItem().toString();
+				String courseName = courseNameTF.getText();
+				String profId = profIdCb.getSelectedItem().toString();
+				String profFirst = profFirstTF.getText();
+				String profLast = profLastTF.getText();
+				String chair = programChairTF.getText();
+				String email = profEmailTF.getText();
+				String campus = campusTF.getText();
+				String isbn = isbnCb.getSelectedItem().toString();
+				String title = titleTF.getText();
+				int edition = Integer.valueOf(editionTF.getText());
+				String authorFirst = authorFirstTF.getText();
+				String authorLast = authorLastTF.getText();
+				String publisher = publisherTF.getText();
+				String copyright = copyrightTF.getText();
+				double cost = Double.valueOf(costTF.getText());
+				
+				status = currentCourse.validateData(courseId, courseName);
+				if (status == "new") currentCourse.newRow(courseId, courseName);
+				if (status == "update") currentCourse.updateRow(courseId, courseName);
+				if (status == "nochange") LOGGER.info("No change to Course");
+				
+				status = currentProfessor.validateData(profId, profFirst, profLast, chair, email, campus);
+				if (status == "new") currentProfessor.newRow(profId, profFirst,
+						profLast, chair, email, campus);
+				if (status == "update") currentProfessor.updateRow(profId, profFirst,
+						profLast, chair, email, campus);
+				if (status == "nochange") LOGGER.info("No change to Professor");
+				
+				status = currentBook.validateData(isbn, title, edition, authorFirst, authorLast, publisher, copyright, cost);
+				if (status == "new") currentBook.newRow(isbn, title, edition, authorFirst, authorLast, publisher, copyright, cost);
+				if (status == "update") currentBook.updateRow(isbn, title, edition, authorFirst, authorLast, publisher, copyright, cost);
+				if (status == "nochange") LOGGER.info("No change to Book");
+				
+			}
+				});
+		submitButton.setBounds(589, 571, 89, 23);
+		addFormPanel.add(submitButton);
+		
+		JPanel requisitionPanel = new JPanel();
+		tabbedPane.addTab("Requisitions", null, requisitionPanel, null);
+		requisitionPanel.setLayout(null);
+		
+		JLabel reqStartLabel = new JLabel("Start Date:");
+		reqStartLabel.setBounds(12, 129, 107, 16);
+		requisitionPanel.add(reqStartLabel);
+		
+		JLabel reqCourseIDLabel = new JLabel("Course ID:");
+		reqCourseIDLabel.setBounds(12, 73, 107, 16);
+		requisitionPanel.add(reqCourseIDLabel);
+		
+		textField_25 = new JTextField();
+		textField_25.setBounds(125, 155, 195, 20);
+		requisitionPanel.add(textField_25);
+		textField_25.setColumns(10);
+		
+		reqStartTF = new JTextField();
+		reqStartTF.setBounds(126, 127, 194, 20);
+		requisitionPanel.add(reqStartTF);
+		reqStartTF.setColumns(10);
+		
+		reqTimeTF = new JTextField();
+		reqTimeTF.setBounds(458, 99, 220, 20);
+		requisitionPanel.add(reqTimeTF);
+		reqTimeTF.setColumns(10);
+		
+		JLabel reqEndLabel = new JLabel("End Date:");
+		reqEndLabel.setBounds(328, 129, 124, 16);
+		requisitionPanel.add(reqEndLabel);
+		
+		reqSectionTF = new JTextField();
+		reqSectionTF.setBounds(126, 99, 194, 20);
+		requisitionPanel.add(reqSectionTF);
+		reqSectionTF.setColumns(10);
+		
+		JLabel reqSectionLabel = new JLabel("Section ID:");
+		reqSectionLabel.setBounds(12, 101, 107, 16);
+		requisitionPanel.add(reqSectionLabel);
+		
+		JLabel reqTimeLabel = new JLabel("Time:");
+		reqTimeLabel.setBounds(328, 101, 124, 16);
+		requisitionPanel.add(reqTimeLabel);
+		
+		reqEndTF = new JTextField();
+		reqEndTF.setBounds(458, 127, 220, 20);
+		requisitionPanel.add(reqEndTF);
+		reqEndTF.setColumns(10);
+		
+		reqCourseIDTF = new JTextField();
+		reqCourseIDTF.setBounds(126, 71, 194, 20);
+		requisitionPanel.add(reqCourseIDTF);
+		reqCourseIDTF.setColumns(10);
+		
+		JLabel reqCourseNameLabel = new JLabel("Course Name:");
+		reqCourseNameLabel.setBounds(328, 73, 124, 16);
+		requisitionPanel.add(reqCourseNameLabel);
+		
+		JLabel lblNewLabel_25 = new JLabel("Term:");
+		lblNewLabel_25.setBounds(12, 157, 107, 16);
+		requisitionPanel.add(lblNewLabel_25);
+		
+		JLabel reqRequisitionIDLabel = new JLabel("Requisition ID:");
+		reqRequisitionIDLabel.setBounds(209, 10, 76, 16);
+		requisitionPanel.add(reqRequisitionIDLabel);
+		
+		JComboBox<String> reqRequisitionComboBox = new JComboBox<String>();
+		reqRequisitionComboBox.setBounds(295, 8, 194, 20);
+		requisitionPanel.add(reqRequisitionComboBox);
+		
+		JLabel reqIsbnLabel = new JLabel("ISBN:");
+		reqIsbnLabel.setBounds(12, 214, 107, 16);
+		requisitionPanel.add(reqIsbnLabel);
+		
+		JLabel reqTitleLabel = new JLabel("Title:");
+		reqTitleLabel.setBounds(328, 214, 124, 16);
+		requisitionPanel.add(reqTitleLabel);
+		
+		JLabel reqEditionLabel = new JLabel("Edition:");
+		reqEditionLabel.setBounds(12, 270, 107, 16);
+		requisitionPanel.add(reqEditionLabel);
+		
+		JLabel reqPublisherLabel = new JLabel("Publisher:");
+		reqPublisherLabel.setBounds(12, 298, 95, 16);
+		requisitionPanel.add(reqPublisherLabel);
+		
+		JLabel reqAuthorFNameLabel = new JLabel("Author First Name:");
+		reqAuthorFNameLabel.setBounds(12, 242, 107, 16);
+		requisitionPanel.add(reqAuthorFNameLabel);
+		
+		JLabel reqAuthorLNameLabel = new JLabel("Author Last Name:");
+		reqAuthorLNameLabel.setBounds(328, 244, 124, 16);
+		requisitionPanel.add(reqAuthorLNameLabel);
+		
+		JLabel reqCostLabel = new JLabel("Cost:");
+		reqCostLabel.setBounds(328, 298, 124, 16);
+		requisitionPanel.add(reqCostLabel);
+		
+		JLabel reqStatusLabel = new JLabel("Status:");
+		reqStatusLabel.setBounds(328, 326, 124, 16);
+		requisitionPanel.add(reqStatusLabel);
+		
+		JLabel reqEmailLabel = new JLabel("Email:");
+		reqEmailLabel.setBounds(12, 447, 95, 16);
+		requisitionPanel.add(reqEmailLabel);
+		
+		JLabel reqCopyrightLabel = new JLabel("Copyright:");
+		reqCopyrightLabel.setBounds(328, 272, 124, 16);
+		requisitionPanel.add(reqCopyrightLabel);
+		
+		JLabel reqQuantityLabel = new JLabel("Quantity:");
+		reqQuantityLabel.setBounds(12, 326, 107, 16);
+		requisitionPanel.add(reqQuantityLabel);
+		
+		JLabel reqProfIDLabel = new JLabel("Professor ID:");
+		reqProfIDLabel.setBounds(12, 391, 107, 16);
+		requisitionPanel.add(reqProfIDLabel);
+		
+		JLabel reqCampusLabel = new JLabel("Campus:");
+		reqCampusLabel.setBounds(328, 391, 124, 16);
+		requisitionPanel.add(reqCampusLabel);
+		
+		reqIsbnTF = new JTextField();
+		reqIsbnTF.setBounds(126, 212, 194, 20);
+		requisitionPanel.add(reqIsbnTF);
+		reqIsbnTF.setColumns(10);
+		
+		reqAuthorFNameTF = new JTextField();
+		reqAuthorFNameTF.setBounds(126, 240, 194, 20);
+		requisitionPanel.add(reqAuthorFNameTF);
+		reqAuthorFNameTF.setColumns(10);
+		
+		reqEditionTF = new JTextField();
+		reqEditionTF.setBounds(126, 270, 194, 20);
+		requisitionPanel.add(reqEditionTF);
+		reqEditionTF.setColumns(10);
+		
+		reqPublisherTF = new JTextField();
+		reqPublisherTF.setBounds(126, 296, 194, 20);
+		requisitionPanel.add(reqPublisherTF);
+		reqPublisherTF.setColumns(10);
+		
+		reqQuantityTF = new JTextField();
+		reqQuantityTF.setBounds(126, 324, 194, 20);
+		requisitionPanel.add(reqQuantityTF);
+		reqQuantityTF.setColumns(10);
+		
+		reqProfIDTF = new JTextField();
+		reqProfIDTF.setBounds(126, 389, 194, 20);
+		requisitionPanel.add(reqProfIDTF);
+		reqProfIDTF.setColumns(10);
+		
+		reqCoureNameTF = new JTextField();
+		reqCoureNameTF.setBounds(458, 71, 220, 20);
+		requisitionPanel.add(reqCoureNameTF);
+		reqCoureNameTF.setColumns(10);
+		
+		reqTitleTF = new JTextField();
+		reqTitleTF.setBounds(458, 212, 220, 20);
+		requisitionPanel.add(reqTitleTF);
+		reqTitleTF.setColumns(10);
+		
+		reqStatusTF = new JTextField();
+		reqStatusTF.setBounds(458, 324, 220, 20);
+		requisitionPanel.add(reqStatusTF);
+		reqStatusTF.setColumns(10);
+		
+		reqCopyrightTF = new JTextField();
+		reqCopyrightTF.setBounds(458, 268, 220, 20);
+		requisitionPanel.add(reqCopyrightTF);
+		reqCopyrightTF.setColumns(10);
+		
+		reqCostTF = new JTextField();
+		reqCostTF.setBounds(458, 296, 220, 20);
+		requisitionPanel.add(reqCostTF);
+		reqCostTF.setColumns(10);
+		
+		reqAuthorLNameTF = new JTextField();
+		reqAuthorLNameTF.setBounds(458, 240, 220, 20);
+		requisitionPanel.add(reqAuthorLNameTF);
+		reqAuthorLNameTF.setColumns(10);
+		
+		reqCampusTF = new JTextField();
+		reqCampusTF.setBounds(458, 389, 220, 20);
+		requisitionPanel.add(reqCampusTF);
+		reqCampusTF.setColumns(10);
+		
+		reqProfLastNameTF = new JTextField();
+		reqProfLastNameTF.setBounds(458, 421, 220, 20);
+		requisitionPanel.add(reqProfLastNameTF);
+		reqProfLastNameTF.setColumns(10);
+		
+		JButton reqEditButton = new JButton("Edit");
+		reqEditButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
+		reqEditButton.setBounds(468, 565, 98, 26);
+		requisitionPanel.add(reqEditButton);
+		
+		JButton reqDeleteButton = new JButton("Delete");
+		reqDeleteButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		reqDeleteButton.setBounds(580, 565, 98, 26);
+		requisitionPanel.add(reqDeleteButton);
+		
+		JButton reqClearButton = new JButton("Clear");
+		reqClearButton.setBounds(360, 565, 98, 26);
+		requisitionPanel.add(reqClearButton);
+		
+		JLabel reqProgramChairLabel = new JLabel("Program Chair:");
+		reqProgramChairLabel.setBounds(328, 447, 124, 16);
+		requisitionPanel.add(reqProgramChairLabel);
+		
+		reqProfFirstNameTF = new JTextField();
+		reqProfFirstNameTF.setBounds(127, 417, 193, 20);
+		requisitionPanel.add(reqProfFirstNameTF);
+		reqProfFirstNameTF.setColumns(10);
+		
+		JLabel reqProfFirstNameLabel = new JLabel("First Name:");
+		reqProfFirstNameLabel.setBounds(12, 419, 95, 16);
+		requisitionPanel.add(reqProfFirstNameLabel);
+		
+		reqProgramChairTF = new JTextField();
+		reqProgramChairTF.setBounds(457, 445, 221, 20);
+		requisitionPanel.add(reqProgramChairTF);
+		reqProgramChairTF.setColumns(10);
+		
+		JLabel reqProfLastNameLabel = new JLabel("Last Name:");
+		reqProfLastNameLabel.setBounds(328, 419, 124, 16);
+		requisitionPanel.add(reqProfLastNameLabel);
+		
+		reqEmailTF = new JTextField();
+		reqEmailTF.setBounds(125, 445, 195, 20);
+		requisitionPanel.add(reqEmailTF);
+		reqEmailTF.setColumns(10);
+		
+		JPanel reportsPanel = new JPanel();
+		tabbedPane.addTab("Reports", null, reportsPanel, null);
+		reportsPanel.setLayout(null);
+		
+		JLabel lblNewLabel_39 = new JLabel("Select report:");
+		lblNewLabel_39.setBounds(71, 44, 86, 16);
+		reportsPanel.add(lblNewLabel_39);
+		
+		//Allows user to pull info. based on book, professor, course
+		JComboBox<String> comboBox_1 = new JComboBox<String>();
+		comboBox_1.setBounds(229, 40, 255, 20);
+		reportsPanel.add(comboBox_1);
+		
+		JScrollPane reportsScrollPane = new JScrollPane();
+		reportsScrollPane.setBounds(12, 112, 579, 387);
+		reportsPanel.add(reportsScrollPane);
+		
+		JTextArea reportTextArea = new JTextArea();
+		reportsScrollPane.setViewportView(reportTextArea);
+		
+		JButton btnNewButton_5 = new JButton("Save");
+		btnNewButton_5.setBounds(582, 565, 98, 26);
+		reportsPanel.add(btnNewButton_5);
+		
+		JButton btnNewButton_6 = new JButton("Clear");
+		btnNewButton_6.setBounds(474, 565, 98, 26);
+		reportsPanel.add(btnNewButton_6);
+		
+		populateCb();
+		
+	}
+	
+	public void populateCb() {
+		isInitializingCb = true;
+		ResultSet rs;
+		courseIdCb.removeAllItems();
+		sectionCb.removeAllItems();
+		isbnCb.removeAllItems();
+		profIdCb.removeAllItems();
+		rs = currentCourse.getList();
+		try {
+			while (rs.next()) courseIdCb.addItem(rs.getString(1));
+		} catch (SQLException e) {
+			LOGGER.warning("populate courseIdCb failed");
+		}
+		rs = currentSection.getList();
+		try {
+			while (rs.next()) sectionCb.addItem(rs.getString(1));
+		} catch (SQLException e) {
+			LOGGER.warning("populate sectionCb failed");
+		}
+		rs = currentBook.getList();
+		try {
+			while (rs.next()) isbnCb.addItem(rs.getString(1));
+		} catch (SQLException e) {
+			LOGGER.warning("populate isbnCb failed");
+		}
+		rs = currentProfessor.getList();
+		try {
+			while (rs.next()) profIdCb.addItem(rs.getString(1));
+		} catch (SQLException e) {
+			LOGGER.warning("populate profIdCb failed");
+		}
+		isInitializingCb = false;
+	}
+
+	public void populateTf(String table, ResultSet rs) {
+		try {
+			while (rs.next()) {
+				if (table == "book")
+				{
+					titleTF.setText(rs.getString(2));
+					editionTF.setText(rs.getString(3));
+					authorFirstTF.setText(rs.getString(4));
+					authorLastTF.setText(rs.getString(5));
+					publisherTF.setText(rs.getString(6));
+					copyrightTF.setText(rs.getString(7));					
+					costTF.setText(rs.getString(8));
+				}
+				if (table == "course")
+					courseNameTF.setText(rs.getString(2));
+				if (table == "professor")
+				{
+					profFirstTF.setText(rs.getString(2));
+					profLastTF.setText(rs.getString(3));
+					programChairTF.setText(rs.getString(4));
+					profEmailTF.setText(rs.getString(5));
+					campusTF.setText(rs.getString(6));
+				}
+				if (table == "section")
+				{
+					startDateTF.setText(rs.getString(4));
+					endDateTF.setText(rs.getString(5));
+					timeTF.setText(rs.getString(6));
+					termTF.setText(rs.getString(7));
+				}
+			}
+		} catch (SQLException e) {
+			LOGGER.warning("testList method in nonGui failed");
+		}
+	}
+}

@@ -1,0 +1,16 @@
+package dataLayer;
+
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+public class DatabaseCommTest {
+
+	@Test
+	public final void testInitializeDatabaseConnection() {
+		
+		DatabaseComm testConnect = new DatabaseComm();
+	  //  assertEquals(testConnect.InitializeDatabaseConnection(), true);
+	}
+
+}

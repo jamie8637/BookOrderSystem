@@ -1,0 +1,85 @@
+package dataLayer;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Logger;
+
+import javax.swing.JOptionPane;
+
+public class DatabaseComm {
+
+	private final static Logger LOGGER = Logger.getLogger(DatabaseComm.class
+			.getName());
+
+	private Connection con;
+	private Statement stmt;
+	private ResultSet rs;
+	private int updateCount;
+
+	public boolean InitializeDatabaseConnection() {
+		// ******** set your database name, login, and password here ********
+		String dbName = "bike_race";
+		String login = "System";
+		String password = "bikerace"; // "advdbm";
+
+		String dbURL = "jdbc:oracle:thin:@//127.0.0.1:1521/" + dbName;// "jdbc:oracle:thin:@localhost:1521:"
+																		// +
+																		// dbName;
+
+		try {
+			// commenting out old style driver registration
+			// Class.forName("oracle.jdbc.OracleDriver");
+			DriverManager.registerDriver(new oracle.jdbc.OracleDriver());
+			con = DriverManager.getConnection(dbURL, login, password);
+			stmt = con.createStatement();
+			JOptionPane.showMessageDialog(null,
+					"Welcome to the Textbook Requisition Application", null,
+					JOptionPane.PLAIN_MESSAGE);
+			return true;
+			// we no longer need this because we've removed the Class.forname()
+			// call
+			// } catch (ClassNotFoundException e) {
+			// LOGGER.warning("Couldn't register JDBC driver.");
+			// LOGGER.warning("Application Ending.");
+			// e.printStackTrace();
+		} catch (SQLException e) {
+			LOGGER.warning("The database connection failed.");
+		}
+		return false;
+	}
+
+	public ResultSet query(String query) {
+		try {
+			rs = stmt.executeQuery(query);
+		} catch (SQLException e) {
+			System.out.println("Query for " + query + " failed");
+		}
+		return rs;
+	}
+
+	public int update(String update) {
+		try {
+			updateCount = stmt.executeUpdate(update);
+		} catch (SQLException e) {
+			LOGGER.warning("Update for " + update + " failed");
+		}
+
+		return updateCount;
+	}
+
+	public PreparedStatement prepareStatement(String insertRaceteamsSQL) {
+		// TODO Auto-generated method stub
+		PreparedStatement ps = null;
+		try {
+			ps = con.prepareStatement(insertRaceteamsSQL);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+}

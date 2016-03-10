@@ -1,0 +1,70 @@
+package businessLayer;
+
+import java.sql.SQLException;
+
+public class SectionBook extends DatabaseBridge {
+
+	/*
+	 * this may not be used public ResultSet getList() { rs =
+	 * dbc.query("SELECT section_id FROM bookstore_section"); return rs;
+	 * 
+	 * }
+	 * 
+	 * public ResultSet getDbData(String courseId) { rs =
+	 * dbc.query("SELECT * FROM bookstore_course WHERE course_id = " +
+	 * courseId); return rs;
+	 * 
+	 * }
+	 */
+
+	public String validateData(String isbn, String courseId, String sectionId,
+			int quantity, String status) {
+		int resultQuantity = 0;
+		String resultStatus = null;
+
+		rs = dbc.query("SELECT * FROM bookstore_section_book WHERE isbn = '"
+				+ isbn + "' AND course_id = '" + courseId
+				+ "' AND section_id = '" + sectionId + "'");
+		try {
+			if (!rs.isBeforeFirst())
+				return "new"; // if the sectionId+courseId+isbn doesn't exist,
+								// returns "new"
+			while (rs.next()) {
+				resultQuantity = (rs.getInt(4));
+				resultStatus = (rs.getString(5));
+			}
+		} catch (SQLException e) {
+			LOGGER.warning("course validate failure");
+		}
+		if ((quantity == resultQuantity) && (status.equals(resultStatus)))
+			return "nochange"; // if all data is the same, returns "nochange"
+		else
+			return "update"; // if some data is different and needs update,
+								// returns "update"
+	}
+
+	public boolean newRow(String isbn, String courseId, String sectionId,
+			int quantity, String status) {
+		updateCount = dbc.update("INSERT INTO bookstore_section_book VALUES ('"
+				+ isbn + "', '" + courseId + "', '" + sectionId + "', '"
+				+ quantity + "', '" + status + "')");
+		if (updateCount == 1)
+			return true;
+		else
+			return false;
+	}
+
+	public boolean updateRow(String isbn, String courseId, String sectionId,
+			int quantity, String status) {
+		updateCount = dbc
+				.update("UPDATE bookstore_section_book SET quantity = '"
+						+ quantity + "', status = '" + status
+						+ "' WHERE isbn = '" + isbn + "' AND course_id = '"
+						+ courseId + "' AND section_id = '" + sectionId + "'");
+		if (updateCount == 1)
+			return true;
+		else
+			return false;
+	}
+
+}

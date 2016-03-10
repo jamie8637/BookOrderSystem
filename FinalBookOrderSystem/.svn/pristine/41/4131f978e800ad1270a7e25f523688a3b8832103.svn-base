@@ -1,0 +1,85 @@
+package businessLayer;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class Section extends DatabaseBridge {
+
+	public ResultSet getList() {
+		rs = dbc.query("SELECT section_id FROM bookstore_section GROUP BY section_id");
+		return rs;
+	}
+
+	public ResultSet getDbData(String sectionID){ 
+		rs = dbc.query("SELECT * FROM bookstore_section WHERE section_id = '" 
+				+ sectionID + "'"); 
+		return rs;
+	}
+	
+
+	public String validateData(String sectionId, String courseId, String empId,
+			String startDate, String endDate, String time, String term) {
+		String resultCourseId = null;
+		String resultEmpId = null;
+		String resultStartDate = null;
+		String resultEndDate = null;
+		String resultTime = null;
+		String resultTerm = null;
+
+		rs = dbc.query("SELECT * FROM bookstore_section WHERE section_id = '"
+				+ sectionId + "' and course_id = '" + courseId + "'");
+		try {
+			if (!rs.isBeforeFirst())
+				return "new"; // if the sectionId+courseId doesn't exist,
+								// returns "new"
+			while (rs.next()) {
+				resultCourseId = (rs.getString(2));
+				resultEmpId = (rs.getString(3));
+				resultStartDate = (rs.getString(4));
+				resultEndDate = (rs.getString(5));
+				resultTime = (rs.getString(6));
+				resultTerm = (rs.getString(7));
+				System.out.println("from db :"+resultCourseId+" "+resultEmpId+" "+resultStartDate+" "+resultEndDate+" "+resultTime+" "+resultTerm);
+				System.out.println("from gui: "+courseId+" "+empId+" "+startDate+" "+endDate+" "+time+" "+term);
+			}
+		} catch (SQLException e) {
+			LOGGER.warning("course validate failure");
+		}
+		if ((courseId.equals(resultCourseId)) && (empId.equals(resultEmpId)) 
+				&& (startDate.equals(resultStartDate))
+				&& (endDate.equals(resultEndDate))
+				&& (time.equals(resultTime))
+				&& (term.equals(resultTerm)))
+			return "nochange"; // if all data is the same, returns "nochange"
+		else
+			return "update"; // if some data is different and needs update,
+								// returns "update"
+	}
+
+	public boolean newRow(String sectionId, String courseId, String empId,
+			String startDate, String endDate, String time, String term) {
+		updateCount = dbc.update("INSERT INTO bookstore_section VALUES ('"
+				+ sectionId + "', '" + courseId + "', '" + empId + "', '"
+				+ startDate + "', '" + endDate + "', '" + time + "', '" 
+				+ term + "')");
+		if (updateCount == 1)
+			return true;
+		else
+			return false;
+	}
+
+	public boolean updateRow(String sectionId, String courseId, String empId,
+			String startDate, String endDate, String time, String term) {
+		updateCount = dbc.update("UPDATE bookstore_section SET emp_id = '" + empId 
+				+ "', start_date = '" + startDate
+				+ "', end_date = '" + endDate
+				+ "', time = '" + time 
+				+ "', term = '" + term 
+				+ "' WHERE section_id = '" + sectionId + "' and course_id = '" + courseId + "'");
+		if (updateCount == 1)
+			return true;
+		else
+			return false;
+	}
+
+}
